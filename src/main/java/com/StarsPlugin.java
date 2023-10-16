@@ -2,6 +2,9 @@ package com;
 
 import com.google.inject.Provides;
 import javax.inject.Inject;
+
+import com.models.ShootingStar;
+import com.services.ActiveStarsFetcher;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
@@ -11,6 +14,8 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+
+import java.util.List;
 
 @Slf4j
 @PluginDescriptor(
@@ -28,6 +33,13 @@ public class StarsPlugin extends Plugin
 	protected void startUp() throws Exception
 	{
 		log.info("'Shooting Stars Tracker' started!");
+		ActiveStarsFetcher fetcher = new ActiveStarsFetcher();
+		List<ShootingStar> stars = fetcher.fetchShootingStars();
+		
+		for (ShootingStar star : stars)
+		{
+			log.info(star.ToMessageString());
+		}
 	}
 
 	@Override
