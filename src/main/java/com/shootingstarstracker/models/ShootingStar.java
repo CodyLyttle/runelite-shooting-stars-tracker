@@ -1,4 +1,4 @@
-package com.models;
+package com.shootingstarstracker.models;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class ShootingStar
 
     @Getter
     @Setter
-    private String location;
+    private String loc;
 
     @Getter
     @Setter
@@ -36,7 +36,7 @@ public class ShootingStar
         msg += "Time: " + time + " mins ago\r\n";
         msg += "World: " + world + "\r\n";
         msg += "Region: " + region + "\r\n";
-        msg += "Location: " + location + "\r\n";
+        msg += "Location: " + loc + "\r\n";
         msg += "Scout: " + scout + "\r\n";
         
         return msg;

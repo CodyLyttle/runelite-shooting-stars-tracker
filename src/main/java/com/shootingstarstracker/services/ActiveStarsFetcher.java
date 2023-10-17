@@ -1,8 +1,8 @@
-package com.services;
+package com.shootingstarstracker.services;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.models.ShootingStar;
+import com.shootingstarstracker.models.ShootingStar;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
