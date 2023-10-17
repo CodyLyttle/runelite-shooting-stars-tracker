@@ -1,35 +1,29 @@
 package com.shootingstarstracker.ui;
 
-import com.shootingstarstracker.StarsPlugin;
 import com.shootingstarstracker.models.ShootingStar;
-import com.shootingstarstracker.services.ActiveStarsFetcher;
+import com.shootingstarstracker.services.ShootingStarsFetcher;
+import com.shootingstarstracker.services.WorldHopper;
 import net.runelite.client.ui.PluginPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class StarsPluginPanel extends PluginPanel
 {
-    private static final int TIER_COL_WIDTH= 40;
-    private static final int TIME_COL_WIDTH = 40;
-    private static final int WORLD_COL_WIDTH = 40;
-    
-    private final StarsPlugin plugin;
     private final JPanel listContainer = new JPanel();
     private List<StarRow> starRows = new ArrayList<>();
     private List<ShootingStar> stars = new ArrayList<>();
 
+    private final ShootingStarsFetcher starsFetcher;
     
-    private final ActiveStarsFetcher starsFetcher;
+    private final WorldHopper worldHopper;
 
-    public StarsPluginPanel(StarsPlugin plugin, ActiveStarsFetcher starsFetcher)
+    public StarsPluginPanel(ShootingStarsFetcher starsFetcher, WorldHopper worldHopper)
     {
-        this.plugin = plugin;
         this.starsFetcher = starsFetcher;
+        this.worldHopper = worldHopper;
         
         setBorder(null);
         listContainer.setLayout(new GridLayout(0, 1));
@@ -54,15 +48,12 @@ public class StarsPluginPanel extends PluginPanel
     
     public void Populate()
     {
-        // Order by time, ascending.
-        stars = starsFetcher.fetchShootingStars().stream()
-                .sorted(Comparator.comparingInt(ShootingStar::getTime))
-                .collect(Collectors.toList());
+        stars = starsFetcher.fetchStars();
         
         boolean useAlternativeColor = false;
         for(ShootingStar star : stars)
         {
-            StarRow row = new StarRow(star, useAlternativeColor);
+            StarRow row = new StarRow(star, useAlternativeColor, this::hopToStarWorld);
             listContainer.add(row);
             starRows.add(row);
             useAlternativeColor = !useAlternativeColor;
@@ -75,5 +66,10 @@ public class StarsPluginPanel extends PluginPanel
     public void Dispose()
     {
         // TODO: Cleanup
+    }
+    
+    private void hopToStarWorld(ShootingStar star)
+    {
+        worldHopper.hop(star.getWorld());
     }
 }

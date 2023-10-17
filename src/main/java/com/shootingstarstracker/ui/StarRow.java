@@ -11,28 +11,30 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
+// TODO: Highlight current world.
 public class StarRow extends JPanel
 {
     private final static int LEFT_COL_WIDTH = 54;
     private final static Color BACKGROUND_COLOR = ColorScheme.DARK_GRAY_COLOR;
     private final static Color BACKGROUND_COLOR_ALTERNATIVE = ColorScheme.DARKER_GRAY_COLOR;
     private final static Color HOVER_COLOR = ColorScheme.DARKER_GRAY_HOVER_COLOR;
-    private final static Color PRESSED_COLOR = ColorScheme.MEDIUM_GRAY_COLOR;
 
     @Getter
     @Setter
     private boolean useAlternativeColors;
+    
 
-    StarRow(ShootingStar star, boolean useAlternativeColors)
+    StarRow(ShootingStar star, boolean useAlternativeColors, Consumer<ShootingStar> onSelect)
     {
         this.useAlternativeColors = useAlternativeColors;
         
         // Label strings.
-        String timeText = star.getTime() + "m ago";
+        String timeText = star.getMinutesAgo() + "m ago";
         String tierText = "Tier: " + star.getTier();
-        String regionAndWorldText = star.getRegion() + " - W" + star.getWorld();
-        String locationText = star.getLoc();
+        String regionAndWorldText = star.getRegion() + " - W" + star.getWorld().getId();
+        String locationText = star.getLocation();
 
         JLabel timeLabel = createLabel(timeText);
         JLabel tierLabel = createLabel(tierText);
@@ -56,12 +58,19 @@ public class StarRow extends JPanel
         add(leftColumn, BorderLayout.WEST);
         add(rightColumn, BorderLayout.CENTER);
 
+        
+        // Current instance is stored as a variable to use within events.
+        StarRow starRowInstance = this;
+        
         this.addMouseListener(new MouseAdapter()
         {
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                // TODO: Hop worlds.
+                if(onSelect == null)
+                    return;
+                
+                onSelect.accept(star);
             }
 
             @Override
@@ -79,22 +88,26 @@ public class StarRow extends JPanel
             }
         });
 
-
         // Forward events to underlying container.
         // By default, controls containing tooltips consume the event.
-        JPanel instanceContainer = this;
         locationLabel.addMouseListener(new MouseAdapter()
         {
             @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
+            }
+            
+            @Override
             public void mouseEntered(MouseEvent e)
             {
-                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, instanceContainer));
+                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
             }
 
             @Override
             public void mouseExited(MouseEvent e)
             {
-                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, instanceContainer));
+                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
             }
         });
     }
