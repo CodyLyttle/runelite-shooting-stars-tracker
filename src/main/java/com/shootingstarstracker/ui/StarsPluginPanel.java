@@ -58,16 +58,15 @@ public class StarsPluginPanel extends PluginPanel
         FilterCheckBox cbWilderness = new FilterCheckBox("Wilderness stars");
         cbWilderness.setLabelTooltip("Include stars in the wilderness");
 
-        // TODO: Replace with combo box: Max total level { 500,750,1250,1500,1750,2000,2200 }
-        FilterCheckBox cbTotalLevel = new FilterCheckBox("Total level worlds");
-        cbTotalLevel.setLabelTooltip("Include stars in total level worlds");
+        FilterComboBox<Integer> comboTotalLevel = new FilterComboBox<>("Max total level", new Integer[]{0, 500, 1000, 1250, 1500, 1750, 2000, 2200});
+        comboTotalLevel.setLabelTooltip("Include stars in total level worlds up to and including this value.");
 
         filterPanel.add(cbF2P);
         filterPanel.add(cbWilderness);
-        filterPanel.add(cbTotalLevel);
+        filterPanel.add(comboTotalLevel);
 
         // Sliders
-        FilterSliderRangePair sliderRangeStarTier = new FilterSliderRangePair(1, 9, 1, 9, "Min tier: ", "Max tier");
+        FilterSliderRangePair sliderRangeStarTier = new FilterSliderRangePair(1, 9, 1, 9, "Min tier: ", "Max tier: ");
         sliderRangeStarTier.setLabelTooltips("Exclude stars below this tier", "Exclude stars above this tier");
         FilterSlider sliderMaxMinutes = new FilterSlider(1, 120, 60, "Minutes: ");
         sliderMaxMinutes.setLabelTooltip("Exclude stars that landed more than this many minutes ago");

@@ -24,7 +24,7 @@ public class FilterSlider extends JPanel
         assert value >= min && value <= max;
 
         this.labelPrefix = labelPrefix;
-        
+
         label = new FilterLabel();
         slider = new JSlider(min, max, value);
         slider.setBackground(Color.white);
