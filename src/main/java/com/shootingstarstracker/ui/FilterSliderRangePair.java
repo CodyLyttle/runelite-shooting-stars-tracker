@@ -7,7 +7,7 @@ import javax.swing.event.ChangeEvent;
 
 // A pair of sliders that share minimum/maximum values and are used to simulate a value range.
 // When the minimum value exceeds the maximum value, the maximum value is updated to the minimum value and vice versa.
-public class ConfigSliderRangePair
+public class FilterSliderRangePair
 {
     @Getter
     private final int minValue;
@@ -16,12 +16,12 @@ public class ConfigSliderRangePair
     private final int maxValue;
 
     @Getter
-    private final ConfigSlider configSliderMin;
+    private final FilterSlider filterSliderMin;
 
     @Getter
-    private final ConfigSlider configSliderMax;
+    private final FilterSlider filterSliderMax;
     
-    public ConfigSliderRangePair(int min, int max, int leftValue, int rightValue, String leftLabelPrefix, String rightLabelPrefix)
+    public FilterSliderRangePair(int min, int max, int leftValue, int rightValue, String leftLabelPrefix, String rightLabelPrefix)
     {
         assert min <= max;
         assert leftValue >= min && leftValue <= max;
@@ -30,37 +30,37 @@ public class ConfigSliderRangePair
 
         minValue = min;
         maxValue = max;
-        configSliderMin = new ConfigSlider(min, max, leftValue, leftLabelPrefix);
-        configSliderMax = new ConfigSlider(min, max, rightValue, rightLabelPrefix);
+        filterSliderMin = new FilterSlider(min, max, leftValue, leftLabelPrefix);
+        filterSliderMax = new FilterSlider(min, max, rightValue, rightLabelPrefix);
 
-        configSliderMin.getSlider().addChangeListener(this::onMinSliderChanged);
-        configSliderMax.getSlider().addChangeListener(this::onMaxSliderChanged);
+        filterSliderMin.getSlider().addChangeListener(this::onMinSliderChanged);
+        filterSliderMax.getSlider().addChangeListener(this::onMaxSliderChanged);
     }
 
     private void onMinSliderChanged(ChangeEvent e)
     {
-        int leftValue = configSliderMin.getSlider().getValue();
-        int rightValue = configSliderMax.getSlider().getValue();
+        int leftValue = filterSliderMin.getSlider().getValue();
+        int rightValue = filterSliderMax.getSlider().getValue();
         if (leftValue > rightValue)
         {
-            configSliderMax.getSlider().setValue(leftValue);
+            filterSliderMax.getSlider().setValue(leftValue);
         }
     }
 
     private void onMaxSliderChanged(ChangeEvent e)
     {
-        int leftValue = configSliderMin.getSlider().getValue();
-        int rightValue = configSliderMax.getSlider().getValue();
+        int leftValue = filterSliderMin.getSlider().getValue();
+        int rightValue = filterSliderMax.getSlider().getValue();
         if (rightValue < leftValue)
         {
-            configSliderMin.getSlider().setValue(rightValue);
+            filterSliderMin.getSlider().setValue(rightValue);
         }
     }
     
     public void setLabelTooltips(String leftTooltip, String rightTooltip)
     {
-        configSliderMin.setLabelTooltip(leftTooltip);
-        configSliderMax.setLabelTooltip(rightTooltip);
+        filterSliderMin.setLabelTooltip(leftTooltip);
+        filterSliderMax.setLabelTooltip(rightTooltip);
     }
 
     public void setRange(int leftValue, int rightValue)
@@ -68,7 +68,7 @@ public class ConfigSliderRangePair
         assert leftValue >= minValue && leftValue <= maxValue;
         assert rightValue >= minValue && rightValue <= maxValue;
 
-        configSliderMin.setValue(leftValue);
-        configSliderMax.setValue(rightValue);
+        filterSliderMin.setValue(leftValue);
+        filterSliderMax.setValue(rightValue);
     }
 }

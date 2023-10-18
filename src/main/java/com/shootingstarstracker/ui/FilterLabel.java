@@ -7,17 +7,17 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class ConfigLabel extends JLabel
+public class FilterLabel extends JLabel
 {
     private final static Color DEFAULT_COLOR = Color.WHITE;
     private final static Color HOVER_COLOR = ColorScheme.BRAND_ORANGE;
     
-    public ConfigLabel()
+    public FilterLabel()
     {
         this("");
     }
     
-    public ConfigLabel(String text)
+    public FilterLabel(String text)
     {
         setForeground(DEFAULT_COLOR);
         setText(text);

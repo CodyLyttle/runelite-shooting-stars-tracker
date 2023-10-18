@@ -9,7 +9,7 @@ import java.awt.*;
 
 // Imitates checkbox control used in config panel.
 // TODO: Link to config property.
-public class ConfigCheckBox extends JPanel
+public class FilterCheckBox extends JPanel
 {
 
     @Getter
@@ -18,9 +18,9 @@ public class ConfigCheckBox extends JPanel
     @Getter
     private final JCheckBox checkBox;
 
-    public ConfigCheckBox(String text)
+    public FilterCheckBox(String text)
     {
-        label = new ConfigLabel(text);
+        label = new FilterLabel(text);
         checkBox = new JCheckBox();
         checkBox.setBackground(ColorScheme.LIGHT_GRAY_COLOR);
         checkBox.addChangeListener(this::onIsSelectedChanged);

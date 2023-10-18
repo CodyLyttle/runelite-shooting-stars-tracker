@@ -8,7 +8,7 @@ import java.awt.*;
 
 import static net.runelite.client.ui.PluginPanel.PANEL_WIDTH;
 
-public class ConfigSlider extends JPanel
+public class FilterSlider extends JPanel
 {
     @Getter
     private final JSlider slider;
@@ -18,14 +18,14 @@ public class ConfigSlider extends JPanel
 
     private final String labelPrefix;
 
-    public ConfigSlider(int min, int max, int value, String labelPrefix)
+    public FilterSlider(int min, int max, int value, String labelPrefix)
     {
         assert min <= max;
         assert value >= min && value <= max;
 
         this.labelPrefix = labelPrefix;
         
-        label = new ConfigLabel();
+        label = new FilterLabel();
         slider = new JSlider(min, max, value);
         slider.setBackground(Color.white);
         slider.addChangeListener(this::onSliderChanged);

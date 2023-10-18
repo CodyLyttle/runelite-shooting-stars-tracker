@@ -38,7 +38,7 @@ public class StarsPluginPanel extends PluginPanel
 
         // Header and config.
         northPanel = new JPanel(new BorderLayout());
-        northPanel.add(createConfigPanel(), BorderLayout.CENTER);
+        northPanel.add(createFilterPanel(), BorderLayout.CENTER);
 
         // Star info.
         southPanel = new JPanel();
@@ -48,35 +48,35 @@ public class StarsPluginPanel extends PluginPanel
         add(southPanel, BorderLayout.CENTER);
     }
 
-    private JPanel createConfigPanel()
+    private JPanel createFilterPanel()
     {
-        ConfigPanel configPanel = new ConfigPanel("Filter");
+        CollapsablePanel filterPanel = new CollapsablePanel("Filter");
 
         // Check boxes
-        ConfigCheckBox cbF2P = new ConfigCheckBox("F2P stars");
+        FilterCheckBox cbF2P = new FilterCheckBox("F2P stars");
         cbF2P.setLabelTooltip("Include stars in free to play worlds");
-        ConfigCheckBox cbWilderness = new ConfigCheckBox("Wilderness stars");
+        FilterCheckBox cbWilderness = new FilterCheckBox("Wilderness stars");
         cbWilderness.setLabelTooltip("Include stars in the wilderness");
 
         // TODO: Replace with combo box: Max total level { 500,750,1250,1500,1750,2000,2200 }
-        ConfigCheckBox cbTotalLevel = new ConfigCheckBox("Total level worlds");
+        FilterCheckBox cbTotalLevel = new FilterCheckBox("Total level worlds");
         cbTotalLevel.setLabelTooltip("Include stars in total level worlds");
 
-        configPanel.add(cbF2P);
-        configPanel.add(cbWilderness);
-        configPanel.add(cbTotalLevel);
+        filterPanel.add(cbF2P);
+        filterPanel.add(cbWilderness);
+        filterPanel.add(cbTotalLevel);
 
         // Sliders
-        ConfigSliderRangePair sliderRangeStarTier = new ConfigSliderRangePair(1, 9, 1, 9, "Min tier: ", "Max tier");
+        FilterSliderRangePair sliderRangeStarTier = new FilterSliderRangePair(1, 9, 1, 9, "Min tier: ", "Max tier");
         sliderRangeStarTier.setLabelTooltips("Exclude stars below this tier", "Exclude stars above this tier");
-        ConfigSlider sliderMaxMinutes = new ConfigSlider(1, 120, 60, "Minutes: ");
+        FilterSlider sliderMaxMinutes = new FilterSlider(1, 120, 60, "Minutes: ");
         sliderMaxMinutes.setLabelTooltip("Exclude stars that landed more than this many minutes ago");
 
-        configPanel.add(sliderRangeStarTier.getConfigSliderMin());
-        configPanel.add(sliderRangeStarTier.getConfigSliderMax());
-        configPanel.add(sliderMaxMinutes);
+        filterPanel.add(sliderRangeStarTier.getFilterSliderMin());
+        filterPanel.add(sliderRangeStarTier.getFilterSliderMax());
+        filterPanel.add(sliderMaxMinutes);
 
-        return configPanel;
+        return filterPanel;
     }
 
     @Override

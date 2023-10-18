@@ -15,8 +15,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
-// Imitates section panel used in config panel.
-public class ConfigPanel extends JPanel
+// Expandable panel 
+public class CollapsablePanel extends JPanel
 {
     private static final Color BACKGROUND_COLOR = ColorScheme.DARKER_GRAY_COLOR;
     private static final ImageIcon SECTION_EXPAND_ICON;
@@ -49,7 +49,7 @@ public class ConfigPanel extends JPanel
         SECTION_RETRACT_ICON_HOVER = new ImageIcon(ImageUtil.alphaOffset(sectionExpandIcon, -100));
     }
 
-    public ConfigPanel(String headerText)
+    public CollapsablePanel(String headerText)
     {
         setLayout(new BorderLayout());
         
