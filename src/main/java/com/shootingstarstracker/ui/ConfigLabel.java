@@ -14,7 +14,7 @@ public class ConfigLabel extends JLabel
     
     public ConfigLabel()
     {
-        super("");
+        this("");
     }
     
     public ConfigLabel(String text)

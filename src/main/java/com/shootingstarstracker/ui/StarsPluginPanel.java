@@ -50,7 +50,7 @@ public class StarsPluginPanel extends PluginPanel
 
     private JPanel createConfigPanel()
     {
-        ConfigPanel configPanel = new ConfigPanel("Config");
+        ConfigPanel configPanel = new ConfigPanel("Filter");
 
         // Check boxes
         ConfigCheckBox cbF2P = new ConfigCheckBox("F2P stars");
