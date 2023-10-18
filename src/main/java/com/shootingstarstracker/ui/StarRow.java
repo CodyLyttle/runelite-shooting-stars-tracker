@@ -24,7 +24,6 @@ public class StarRow extends JPanel
     @Getter
     @Setter
     private boolean useAlternativeColors;
-    
 
     StarRow(ShootingStar star, boolean useAlternativeColors, Consumer<ShootingStar> onSelect)
     {
@@ -43,7 +42,7 @@ public class StarRow extends JPanel
         locationLabel.setToolTipText(locationText);
 
         setLayout(new BorderLayout());
-        setBorder(new EmptyBorder(1, 0, 1, 0));
+        setBorder(new EmptyBorder(0, 6, 0, 6));
         setBackground(getBackgroundColor());
 
         JPanel leftColumn = createColumn();
@@ -58,7 +57,6 @@ public class StarRow extends JPanel
         add(leftColumn, BorderLayout.WEST);
         add(rightColumn, BorderLayout.CENTER);
 
-        
         // Current instance is stored as a variable to use within events.
         StarRow starRowInstance = this;
         
