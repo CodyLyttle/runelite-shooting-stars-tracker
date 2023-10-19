@@ -54,8 +54,6 @@ public class StarsPlugin extends Plugin
 
     private NavigationButton navButton;
     
-
-
     @Override
     public void configure(Binder binder)
     {
@@ -85,6 +83,7 @@ public class StarsPlugin extends Plugin
     {
         // Remove side panel.
         clientToolbar.removeNavigation(navButton);
+        sidePanel.reset();
         sidePanel = null;
     }
 
