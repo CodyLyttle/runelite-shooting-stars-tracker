@@ -4,11 +4,10 @@ import net.runelite.client.ui.components.ComboBoxListRenderer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.BiConsumer;
 
-import static net.runelite.client.ui.PluginPanel.PANEL_WIDTH;
-
-public class FilterComboBox<T> extends JPanel
-{   
+public class FilterComboBox<T> extends JPanel implements IFilterElement<T>
+{
     private final JLabel label;
     private final JComboBox<T> comboBox;
 
@@ -26,8 +25,26 @@ public class FilterComboBox<T> extends JPanel
         add(comboBox, BorderLayout.EAST);
     }
 
+    @Override
+    public T getValue()
+    {
+        return comboBox.getItemAt(comboBox.getSelectedIndex());
+    }
+
+    @Override
+    public void setValue(T value)
+    {
+        comboBox.setSelectedItem(value);
+    }
+
     public void setLabelTooltip(String text)
     {
         label.setToolTipText(text);
+    }
+
+    @Override
+    public void subscribe(BiConsumer<Object, Object> callback)
+    {
+        comboBox.addActionListener((e) -> callback.accept(this, comboBox.getItemAt(comboBox.getSelectedIndex())));
     }
 }

@@ -123,7 +123,7 @@ public class CollapsablePanel extends JPanel
         expandButton.setToolTipText(isExpanded ? "Retract" : "Expand");
     }
 
-    public void add(JComponent component)
+    public void addContentElement(JComponent component)
     {
         component.setBackground(BACKGROUND_COLOR);
         contentPanel.add(component);

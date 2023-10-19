@@ -4,12 +4,14 @@ import com.shootingstarstracker.models.ShootingStar;
 import com.shootingstarstracker.services.ShootingStarsFetcher;
 import com.shootingstarstracker.services.WorldHopper;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.WorldType;
 import net.runelite.client.ui.PluginPanel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 @Slf4j
@@ -20,6 +22,7 @@ public class StarsPluginPanel extends PluginPanel
     // Containers
     private final JPanel northPanel;
     private final JPanel southPanel;
+    private final StarFilterPanel filterPanel;
 
     private List<StarRow> starRows = new ArrayList<>();
     private List<ShootingStar> stars = new ArrayList<>();
@@ -38,7 +41,9 @@ public class StarsPluginPanel extends PluginPanel
 
         // Header and config.
         northPanel = new JPanel(new BorderLayout());
-        northPanel.add(createFilterPanel(), BorderLayout.CENTER);
+        filterPanel = new StarFilterPanel();
+        filterPanel.setFilterChangedCallback(this::filterStars);
+        northPanel.add(filterPanel, BorderLayout.CENTER);
 
         // Star info.
         southPanel = new JPanel();
@@ -48,41 +53,11 @@ public class StarsPluginPanel extends PluginPanel
         add(southPanel, BorderLayout.CENTER);
     }
 
-    private JPanel createFilterPanel()
-    {
-        CollapsablePanel filterPanel = new CollapsablePanel("Filter");
-
-        // Check boxes
-        FilterCheckBox cbF2P = new FilterCheckBox("F2P stars");
-        cbF2P.setLabelTooltip("Include stars in free to play worlds");
-        FilterCheckBox cbWilderness = new FilterCheckBox("Wilderness stars");
-        cbWilderness.setLabelTooltip("Include stars in the wilderness");
-
-        FilterComboBox<Integer> comboTotalLevel = new FilterComboBox<>("Max total level", new Integer[]{0, 500, 1000, 1250, 1500, 1750, 2000, 2200});
-        comboTotalLevel.setLabelTooltip("Include stars in total level worlds up to and including this value.");
-
-        filterPanel.add(cbF2P);
-        filterPanel.add(cbWilderness);
-        filterPanel.add(comboTotalLevel);
-
-        // Sliders
-        FilterSliderRangePair sliderRangeStarTier = new FilterSliderRangePair(1, 9, 1, 9, "Min tier: ", "Max tier: ");
-        sliderRangeStarTier.setLabelTooltips("Exclude stars below this tier", "Exclude stars above this tier");
-        FilterSlider sliderMaxMinutes = new FilterSlider(1, 120, 60, "Minutes: ");
-        sliderMaxMinutes.setLabelTooltip("Exclude stars that landed more than this many minutes ago");
-
-        filterPanel.add(sliderRangeStarTier.getFilterSliderMin());
-        filterPanel.add(sliderRangeStarTier.getFilterSliderMax());
-        filterPanel.add(sliderMaxMinutes);
-
-        return filterPanel;
-    }
-
     @Override
     public void onActivate()
     {
         // TODO: Use a placeholder panel until stars are fetched.
-        Populate();
+        LoadStars();
     }
 
     @Override
@@ -94,8 +69,9 @@ public class StarsPluginPanel extends PluginPanel
         southPanel.invalidate();
     }
 
-    public void Populate()
+    public void LoadStars()
     {
+        starRows.clear();
         stars = starsFetcher.fetchStars();
 
         boolean useAlternativeColor = false;
@@ -104,7 +80,6 @@ public class StarsPluginPanel extends PluginPanel
             try
             {
                 StarRow row = new StarRow(star, useAlternativeColor, this::hopToStarWorld);
-                southPanel.add(row);
                 starRows.add(row);
                 useAlternativeColor = !useAlternativeColor;
             }
@@ -115,13 +90,61 @@ public class StarsPluginPanel extends PluginPanel
             }
         }
 
-        southPanel.revalidate();
+        filterStars();
+    }
+
+    // TODO: Optimize.
+    public void filterStars()
+    {
+        southPanel.removeAll();
+
+        for (StarRow row : starRows)
+        {
+            ShootingStar star = row.getStar();
+
+            boolean isFiltered = star.getTier() < filterPanel.getMinTier()
+                    || star.getTier() > filterPanel.getMaxTier()
+                    || star.getMinutesAgo() > filterPanel.getMaxStarAge()
+                    || isFilteredWorld(star);
+
+            if (!isFiltered)
+                southPanel.add(row);
+        }
+
+        southPanel.invalidate();
         southPanel.repaint();
     }
 
-    public void Dispose()
+    private boolean isFilteredWorld(ShootingStar star)
     {
-        // TODO: Cleanup
+        EnumSet<WorldType> worldTypes = star.getWorld().getTypes();
+
+        if (filterPanel.getHideF2PWorlds() && !worldTypes.contains(WorldType.MEMBERS))
+            return true;
+        
+        if (filterPanel.getHidePVPWorlds() && WorldType.isPvpWorld(worldTypes))
+            return true;
+        
+        if (worldTypes.contains(WorldType.SKILL_TOTAL))
+        {
+            try
+            {
+                String levelString = star.getWorld().getActivity().split(" ", 2)[0];
+                int level = Integer.parseInt(levelString);
+                int maxLevel = filterPanel.getMaxTotalLevel();
+                if(level > maxLevel)
+                    return true;
+            }
+            catch (NumberFormatException e)
+            {
+                log.error("Failed to parse total level integer from total level world");
+            }
+        }
+
+        if (filterPanel.getHideWilderness() && star.getLocation().toLowerCase().contains("wilderness"))
+            return true;
+
+        return false;
     }
 
     private void hopToStarWorld(ShootingStar star)

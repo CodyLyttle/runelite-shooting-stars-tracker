@@ -85,7 +85,6 @@ public class StarsPlugin extends Plugin
     {
         // Remove side panel.
         clientToolbar.removeNavigation(navButton);
-        sidePanel.Dispose();
         sidePanel = null;
     }
 

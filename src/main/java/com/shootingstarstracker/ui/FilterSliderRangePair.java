@@ -56,19 +56,4 @@ public class FilterSliderRangePair
             filterSliderMin.getSlider().setValue(rightValue);
         }
     }
-    
-    public void setLabelTooltips(String leftTooltip, String rightTooltip)
-    {
-        filterSliderMin.setLabelTooltip(leftTooltip);
-        filterSliderMax.setLabelTooltip(rightTooltip);
-    }
-
-    public void setRange(int leftValue, int rightValue)
-    {
-        assert leftValue >= minValue && leftValue <= maxValue;
-        assert rightValue >= minValue && rightValue <= maxValue;
-
-        filterSliderMin.setValue(leftValue);
-        filterSliderMax.setValue(rightValue);
-    }
 }

@@ -5,10 +5,11 @@ import lombok.Getter;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
+import java.util.function.BiConsumer;
 
 import static net.runelite.client.ui.PluginPanel.PANEL_WIDTH;
 
-public class FilterSlider extends JPanel
+public class FilterSlider extends JPanel implements IFilterElement<Integer>
 {
     @Getter
     private final JSlider slider;
@@ -46,19 +47,32 @@ public class FilterSlider extends JPanel
         updateLabel();
     }
 
+    @Override
+    public Integer getValue()
+    {
+        return slider.getValue();
+    }
+
+    @Override
+    public void setValue(Integer value)
+    {
+        assert value >= slider.getMinimum() && value <= slider.getMaximum();
+        slider.setValue(value);
+    }
+
     public void setLabelTooltip(String tooltip)
     {
         label.setToolTipText(tooltip);
     }
 
+    @Override
+    public void subscribe(BiConsumer<Object, Object> callback)
+    {
+        slider.addChangeListener((e) -> callback.accept(this, slider.getValue()));
+    }
+
     private void updateLabel()
     {
         label.setText(labelPrefix + slider.getValue());
-    }
-
-    public void setValue(int value)
-    {
-        assert value >= slider.getMinimum() && value <= slider.getMaximum();
-        slider.setValue(value);
     }
 }

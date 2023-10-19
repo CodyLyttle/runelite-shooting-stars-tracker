@@ -4,12 +4,11 @@ import lombok.Getter;
 import net.runelite.client.ui.ColorScheme;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
+import java.util.function.BiConsumer;
 
 // Imitates checkbox control used in config panel.
-// TODO: Link to config property.
-public class FilterCheckBox extends JPanel
+public class FilterCheckBox extends JPanel implements IFilterElement<Boolean>
 {
 
     @Getter
@@ -23,36 +22,29 @@ public class FilterCheckBox extends JPanel
         label = new FilterLabel(text);
         checkBox = new JCheckBox();
         checkBox.setBackground(ColorScheme.LIGHT_GRAY_COLOR);
-        checkBox.addChangeListener(this::onIsSelectedChanged);
-        
+
         setLayout(new BorderLayout());
         add(label, BorderLayout.CENTER);
         add(checkBox, BorderLayout.EAST);
-        syncWithConfig();
     }
 
-    public boolean getIsSelected()
+    public Boolean getValue()
     {
         return checkBox.isSelected();
     }
 
-    public void setIsSelected(boolean value)
+    public void setValue(Boolean value)
     {
         checkBox.setSelected(value);
     }
-    
+
     public void setLabelTooltip(String tooltip)
     {
         label.setToolTipText(tooltip);
     }
-    
-    private void syncWithConfig()
+
+    public void subscribe(BiConsumer<Object, Object> callback)
     {
-        // TODO: Load value from config.
-    }
-    
-    private void onIsSelectedChanged(ChangeEvent e)
-    {
-        // TODO: Set config value.
+        checkBox.addChangeListener((e) -> callback.accept(this, checkBox.isSelected()));
     }
 }

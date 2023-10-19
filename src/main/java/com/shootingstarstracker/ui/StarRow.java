@@ -25,10 +25,14 @@ public class StarRow extends JPanel
     @Setter
     private boolean useAlternativeColors;
 
+    @Getter
+    private ShootingStar star;
+
     StarRow(ShootingStar star, boolean useAlternativeColors, Consumer<ShootingStar> onSelect)
     {
+        this.star = star;
         this.useAlternativeColors = useAlternativeColors;
-        
+
         // Label strings.
         String timeText = star.getMinutesAgo() + "m ago";
         String tierText = "Tier: " + star.getTier();
@@ -46,7 +50,7 @@ public class StarRow extends JPanel
         setBackground(getBackgroundColor());
 
         JPanel leftColumn = createColumn();
-        leftColumn.setPreferredSize(new Dimension(LEFT_COL_WIDTH, 0));
+        leftColumn.setPreferredSize(new Dimension(LEFT_COL_WIDTH, leftColumn.getPreferredSize().height));
         leftColumn.add(timeLabel);
         leftColumn.add(tierLabel);
 
@@ -59,15 +63,15 @@ public class StarRow extends JPanel
 
         // Current instance is stored as a variable to use within events.
         StarRow starRowInstance = this;
-        
+
         this.addMouseListener(new MouseAdapter()
         {
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                if(onSelect == null)
+                if (onSelect == null)
                     return;
-                
+
                 onSelect.accept(star);
             }
 
@@ -95,7 +99,7 @@ public class StarRow extends JPanel
             {
                 dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
             }
-            
+
             @Override
             public void mouseEntered(MouseEvent e)
             {
