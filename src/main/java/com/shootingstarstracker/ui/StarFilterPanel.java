@@ -1,31 +1,36 @@
 package com.shootingstarstracker.ui;
 
+import com.shootingstarstracker.FilterConfigManager;
+import com.shootingstarstracker.FilterKey;
+
 public class StarFilterPanel extends CollapsablePanel
 {
-    private final FilterCheckBox checkBoxF2P;
-    private final FilterCheckBox checkBoxWilderness;
-    private final FilterCheckBox checkBoxPVP;
+    private final FilterCheckBox checkBoxHideF2P;
+    private final FilterCheckBox checkBoxHidePVP;
+    private final FilterCheckBox checkBoxHideWilderness;
     private final FilterComboBox<Integer> comboTotalLevel;
     private final FilterSlider sliderStarTierMin;
     private final FilterSlider sliderStarTierMax;
     private final FilterSlider sliderMaxStarAge;
+    private final FilterConfigManager filterConfigManager;
     private Runnable filterChangedCallback;
 
-    public StarFilterPanel()
+    public StarFilterPanel(FilterConfigManager filterConfigManager)
     {
         super("Filter");
+        this.filterConfigManager = filterConfigManager;
 
-        checkBoxF2P = new FilterCheckBox("Hide F2P");
-        checkBoxF2P.setLabelTooltip("Hide stars in free to play worlds");
-        checkBoxF2P.subscribe(this::onFilterChanged);
-        
-        checkBoxPVP = new FilterCheckBox("Hide PVP");
-        checkBoxPVP.setLabelTooltip("Hide stars in player-vs-player worlds");
-        checkBoxPVP.subscribe(this::onFilterChanged);
+        checkBoxHideF2P = new FilterCheckBox("Hide F2P");
+        checkBoxHideF2P.setLabelTooltip("Hide stars in free to play worlds");
+        checkBoxHideF2P.subscribe(this::onFilterChanged);
 
-        checkBoxWilderness = new FilterCheckBox("Hide Wilderness");
-        checkBoxWilderness.setLabelTooltip("Hide stars landed in the wilderness");
-        checkBoxWilderness.subscribe(this::onFilterChanged);
+        checkBoxHidePVP = new FilterCheckBox("Hide PVP");
+        checkBoxHidePVP.setLabelTooltip("Hide stars in player-vs-player worlds");
+        checkBoxHidePVP.subscribe(this::onFilterChanged);
+
+        checkBoxHideWilderness = new FilterCheckBox("Hide Wilderness");
+        checkBoxHideWilderness.setLabelTooltip("Hide stars landed in the wilderness");
+        checkBoxHideWilderness.subscribe(this::onFilterChanged);
 
         comboTotalLevel = new FilterComboBox<>("Total level", new Integer[]{0, 500, 1000, 1250, 1500, 1750, 2000, 2200});
         comboTotalLevel.setLabelTooltip("Hide stars in total level worlds exceeding this value");
@@ -43,28 +48,41 @@ public class StarFilterPanel extends CollapsablePanel
         sliderMaxStarAge.setLabelTooltip("Hide stars that landed more than this many minutes ago");
         sliderMaxStarAge.subscribe(this::onFilterChanged);
 
-        addContentElement(checkBoxF2P);
-        addContentElement(checkBoxPVP);
-        addContentElement(checkBoxWilderness);
+        loadValuesFromConfig();
+
+        addContentElement(checkBoxHideF2P);
+        addContentElement(checkBoxHidePVP);
+        addContentElement(checkBoxHideWilderness);
         addContentElement(comboTotalLevel);
         addContentElement(sliderStarTierMin);
         addContentElement(sliderStarTierMax);
         addContentElement(sliderMaxStarAge);
     }
 
+    private void loadValuesFromConfig()
+    {
+        checkBoxHideF2P.setValue(Boolean.parseBoolean(filterConfigManager.load(FilterKey.HIDE_F2P)));
+        checkBoxHidePVP.setValue(Boolean.parseBoolean(filterConfigManager.load(FilterKey.HIDE_PVP)));
+        checkBoxHideWilderness.setValue(Boolean.parseBoolean(filterConfigManager.load(FilterKey.HIDE_WILDERNESS)));
+        comboTotalLevel.setValue(Integer.parseInt(filterConfigManager.load(FilterKey.TOTAL_LEVEL)));
+        sliderStarTierMin.setValue(Integer.parseInt(filterConfigManager.load(FilterKey.MIN_TIER)));
+        sliderStarTierMax.setValue(Integer.parseInt(filterConfigManager.load(FilterKey.MAX_TIER)));
+        sliderMaxStarAge.setValue(Integer.parseInt(filterConfigManager.load(FilterKey.MAX_STAR_AGE)));
+    }
+
     public boolean getHideF2PWorlds()
     {
-        return checkBoxF2P.getValue();
+        return checkBoxHideF2P.getValue();
     }
-    
+
     public boolean getHidePVPWorlds()
     {
-    return checkBoxPVP.getValue();
+        return checkBoxHidePVP.getValue();
     }
 
     public boolean getHideWilderness()
     {
-        return checkBoxWilderness.getValue();
+        return checkBoxHideWilderness.getValue();
     }
 
     public Integer getMaxTotalLevel()
@@ -86,44 +104,44 @@ public class StarFilterPanel extends CollapsablePanel
     {
         return sliderMaxStarAge.getValue();
     }
-    
+
     public void setFilterChangedCallback(Runnable callback)
     {
-        filterChangedCallback = callback;        
+        filterChangedCallback = callback;
     }
 
     private void onFilterChanged(Object target, Object value)
     {
-        if (target == checkBoxF2P)
+        if (target == checkBoxHideF2P)
         {
-            // TODO: Update config
+            filterConfigManager.save(FilterKey.HIDE_F2P, value);
         }
-        else if(target == checkBoxPVP)
+        else if (target == checkBoxHidePVP)
         {
-            // TODO: Update config
+            filterConfigManager.save(FilterKey.HIDE_PVP, value);
         }
-        else if (target == checkBoxWilderness)
+        else if (target == checkBoxHideWilderness)
         {
-            // TODO: Update config
+            filterConfigManager.save(FilterKey.HIDE_WILDERNESS, value);
         }
         else if (target == comboTotalLevel)
         {
-            // TODO: Update config
+            filterConfigManager.save(FilterKey.TOTAL_LEVEL, value);
         }
         else if (target == sliderStarTierMin)
         {
-            // TODO: Update config
+            filterConfigManager.save(FilterKey.MIN_TIER, value);
         }
         else if (target == sliderStarTierMax)
         {
-            // TODO: Update config
+            filterConfigManager.save(FilterKey.MAX_TIER, value);
         }
         else if (target == sliderMaxStarAge)
         {
-            // TODO: Update config
+            filterConfigManager.save(FilterKey.MAX_STAR_AGE, value);
         }
-        
-        if(filterChangedCallback != null)
+
+        if (filterChangedCallback != null)
             filterChangedCallback.run();
     }
 }

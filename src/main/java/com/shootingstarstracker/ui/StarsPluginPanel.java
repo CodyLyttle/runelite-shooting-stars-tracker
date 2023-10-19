@@ -1,5 +1,6 @@
 package com.shootingstarstracker.ui;
 
+import com.shootingstarstracker.FilterConfigManager;
 import com.shootingstarstracker.models.ShootingStar;
 import com.shootingstarstracker.services.ShootingStarsFetcher;
 import com.shootingstarstracker.services.WorldHopper;
@@ -33,7 +34,7 @@ public class StarsPluginPanel extends PluginPanel
     private final WorldHopper worldHopper;
 
 
-    public StarsPluginPanel(ShootingStarsFetcher starsFetcher, WorldHopper worldHopper)
+    public StarsPluginPanel(FilterConfigManager filterConfigManager, ShootingStarsFetcher starsFetcher, WorldHopper worldHopper)
     {
         this.starsFetcher = starsFetcher;
         this.worldHopper = worldHopper;
@@ -44,7 +45,7 @@ public class StarsPluginPanel extends PluginPanel
 
         // Header and config.
         JPanel northPanel = new JPanel(new BorderLayout());
-        filterPanel = new StarFilterPanel();
+        filterPanel = new StarFilterPanel(filterConfigManager);
         filterPanel.setFilterChangedCallback(this::filterStars);
         northPanel.add(filterPanel, BorderLayout.CENTER);
 
