@@ -2,6 +2,7 @@ package com.shootingstarstracker.ui;
 
 import com.shootingstarstracker.models.ShootingStar;
 import lombok.Getter;
+import net.runelite.api.WorldType;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 
@@ -10,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.EnumSet;
 import java.util.function.Consumer;
 
 // TODO: Highlight current world.
@@ -23,7 +25,7 @@ public class StarRow extends JPanel
     private boolean useAlternativeColors;
 
     @Getter
-    private ShootingStar star;
+    private final ShootingStar star;
 
     StarRow(ShootingStar star, Consumer<ShootingStar> onSelect)
     {
@@ -38,6 +40,7 @@ public class StarRow extends JPanel
         JLabel timeLabel = createLabel(timeText);
         JLabel tierLabel = createLabel(tierText);
         JLabel regionAndWorldLabel = createLabel(regionAndWorldText);
+        regionAndWorldLabel.setToolTipText(createWorldTooltip());
         JLabel locationLabel = createLabel(locationText);
         locationLabel.setToolTipText(locationText);
 
@@ -108,6 +111,29 @@ public class StarRow extends JPanel
                 dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
             }
         });
+
+        // Forward events to underlying container.
+        // By default, controls containing tooltips consume the event.
+        regionAndWorldLabel.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e)
+            {
+                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e)
+            {
+                dispatchEvent(SwingUtilities.convertMouseEvent(e.getComponent(), e, starRowInstance));
+            }
+        });
     }
 
     private JPanel createColumn()
@@ -133,6 +159,39 @@ public class StarRow extends JPanel
     {
         return useAlternativeColors ? BACKGROUND_COLOR_ALTERNATIVE : BACKGROUND_COLOR;
     }
+    
+    private String createWorldTooltip()
+    {
+        int number = star.getWorld().getId();
+        int population = star.getWorld().getPlayerCount();
+        String activity = star.getWorld().getActivity();
+        EnumSet<WorldType> types = star.getWorld().getTypes();
+        
+        StringBuilder builder = new StringBuilder();
+        
+        // 🌍123   👤2000
+        // - Fishing Trawler
+        // - Members
+        builder.append("\uD83C\uDF0D").append(number).append("   \uD83D\uDC64").append(population);
+        
+        // Add world specific activity.
+        if(!activity.equals("-"))
+        {
+            builder.append("<br>- ").append(activity);
+        }
+        
+        for(WorldType type : types)
+        {
+            // Skill total is already displayed as an activity.
+            if(type == WorldType.SKILL_TOTAL)
+                continue;
+            
+            builder.append("<br>- ").append(convertEnumToCamelCase(type.name()));
+        }
+        
+        // Line breaks require html tags.
+        return "<html>" + builder + "</html>";
+    }
 
     public void useAlternativeColors(boolean value)
     {
@@ -141,5 +200,33 @@ public class StarRow extends JPanel
 
         useAlternativeColors = value;
         setBackground(getBackgroundColor());
+    }
+    
+    private String convertEnumToCamelCase(String str)
+    {
+        char[] chars = new char[str.length()];
+        boolean newWord = true;
+        
+        for(int i = 0; i < str.length(); i++)
+        {
+            char c = str.charAt(i);
+            
+            if(c == '_')
+            {
+                chars[i] = ' ';
+                newWord = true;
+            }
+            else if(newWord && Character.isAlphabetic(c))
+            {
+                chars[i] = c;
+                newWord = false;
+            }
+            else
+            {
+                chars[i] = Character.toLowerCase(c);
+            }
+        }
+        
+        return new String(chars);
     }
 }
