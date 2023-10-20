@@ -2,7 +2,6 @@ package com.shootingstarstracker.ui;
 
 import com.shootingstarstracker.models.ShootingStar;
 import lombok.Getter;
-import lombok.Setter;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 
@@ -21,17 +20,14 @@ public class StarRow extends JPanel
     private final static Color BACKGROUND_COLOR_ALTERNATIVE = ColorScheme.DARKER_GRAY_COLOR;
     private final static Color HOVER_COLOR = ColorScheme.DARKER_GRAY_HOVER_COLOR;
 
-    @Getter
-    @Setter
     private boolean useAlternativeColors;
 
     @Getter
     private ShootingStar star;
 
-    StarRow(ShootingStar star, boolean useAlternativeColors, Consumer<ShootingStar> onSelect)
+    StarRow(ShootingStar star, Consumer<ShootingStar> onSelect)
     {
         this.star = star;
-        this.useAlternativeColors = useAlternativeColors;
 
         // Label strings.
         String timeText = star.getMinutesAgo() + "m ago";
@@ -136,5 +132,14 @@ public class StarRow extends JPanel
     private Color getBackgroundColor()
     {
         return useAlternativeColors ? BACKGROUND_COLOR_ALTERNATIVE : BACKGROUND_COLOR;
+    }
+
+    public void useAlternativeColors(boolean value)
+    {
+        if(useAlternativeColors == value)
+            return;
+
+        useAlternativeColors = value;
+        setBackground(getBackgroundColor());
     }
 }

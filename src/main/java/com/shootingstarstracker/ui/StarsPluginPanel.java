@@ -77,15 +77,13 @@ public class StarsPluginPanel extends PluginPanel
         SwingUtilities.invokeLater(() ->
         {
             List<StarRow> updatedRows = new ArrayList<>();
-            boolean useAlternativeColor = false;
 
             for (ShootingStar star : stars)
             {
                 try
                 {
-                    StarRow row = new StarRow(star, useAlternativeColor, this::hopToStarWorld);
+                    StarRow row = new StarRow(star, this::hopToStarWorld);
                     updatedRows.add(row);
-                    useAlternativeColor = !useAlternativeColor;
                 }
                 catch (NullPointerException ex)
                 {
@@ -106,6 +104,7 @@ public class StarsPluginPanel extends PluginPanel
         SwingUtilities.invokeLater(() ->
         {
             starPanel.removeAll();
+            boolean useAlternativeColor = false;
 
             for (StarRow row : starRows)
             {
@@ -117,7 +116,11 @@ public class StarsPluginPanel extends PluginPanel
                         || isFilteredWorld(star);
 
                 if (!isFiltered)
+                {
+                    row.useAlternativeColors(useAlternativeColor);
+                    useAlternativeColor = !useAlternativeColor;
                     starPanel.add(row);
+                }
             }
 
             starPanel.revalidate();
