@@ -1,7 +1,8 @@
 package com.shootingstarstracker.ui;
 
-import com.shootingstarstracker.FilterConfigManager;
-import com.shootingstarstracker.FilterKey;
+import com.shootingstarstracker.services.FilterConfigManager;
+import com.shootingstarstracker.enums.FilterKey;
+import com.shootingstarstracker.ui.elements.*;
 
 public class StarFilterPanel extends CollapsablePanel
 {

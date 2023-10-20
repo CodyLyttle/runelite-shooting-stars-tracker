@@ -1,6 +1,6 @@
 package com.shootingstarstracker.ui;
 
-import com.shootingstarstracker.FilterConfigManager;
+import com.shootingstarstracker.services.FilterConfigManager;
 import com.shootingstarstracker.models.ShootingStar;
 import com.shootingstarstracker.services.ShootingStarsFetcher;
 import com.shootingstarstracker.services.WorldHopper;

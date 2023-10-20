@@ -1,4 +1,4 @@
-package com.shootingstarstracker.ui;
+package com.shootingstarstracker.ui.elements;
 
 
 import lombok.Getter;

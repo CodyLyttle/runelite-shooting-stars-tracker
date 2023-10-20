@@ -1,4 +1,4 @@
-package com.shootingstarstracker;
+package com.shootingstarstracker.enums;
 
 public enum FilterKey
 {

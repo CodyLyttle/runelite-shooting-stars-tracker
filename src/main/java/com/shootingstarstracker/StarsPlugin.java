@@ -6,6 +6,8 @@ import com.google.inject.Provides;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.shootingstarstracker.enums.FilterKey;
+import com.shootingstarstracker.services.FilterConfigManager;
 import com.shootingstarstracker.services.ShootingStarsFetcher;
 import com.shootingstarstracker.services.WorldHopper;
 import com.shootingstarstracker.ui.StarsPluginPanel;

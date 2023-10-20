@@ -1,5 +1,6 @@
-package com.shootingstarstracker;
+package com.shootingstarstracker.services;
 
+import com.shootingstarstracker.enums.FilterKey;
 import net.runelite.client.config.ConfigManager;
 
 import javax.inject.Inject;

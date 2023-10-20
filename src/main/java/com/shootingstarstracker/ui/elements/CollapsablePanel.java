@@ -1,4 +1,4 @@
-package com.shootingstarstracker.ui;
+package com.shootingstarstracker.ui.elements;
 
 import com.shootingstarstracker.StarsPlugin;
 import lombok.Getter;
@@ -15,7 +15,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 
-// Expandable panel 
 public class CollapsablePanel extends JPanel
 {
     private static final Color BACKGROUND_COLOR = ColorScheme.DARKER_GRAY_COLOR;
