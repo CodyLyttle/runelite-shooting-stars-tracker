@@ -25,6 +25,8 @@ public class CollapsablePanel extends JPanel
     
     private final JButton expandButton;
     
+    private final JPanel headerPanel;
+    
     private final JLabel headerLabel;
     
     private final JPanel contentPanel;
@@ -53,7 +55,7 @@ public class CollapsablePanel extends JPanel
         setLayout(new BorderLayout());
         
         // Header panel
-        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBorder(new EmptyBorder(8,8,8,8));
         headerPanel.setBackground(BACKGROUND_COLOR);
 
@@ -112,6 +114,11 @@ public class CollapsablePanel extends JPanel
 
         isExpanded = !isExpanded;
         updateLayout();
+    }
+    
+    protected void addEasternHeaderComponent(JComponent component)
+    {
+        headerPanel.add(component, BorderLayout.EAST);
     }
 
     public void updateLayout()

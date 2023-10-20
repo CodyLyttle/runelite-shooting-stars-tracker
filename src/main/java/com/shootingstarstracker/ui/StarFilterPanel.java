@@ -19,6 +19,8 @@ public class StarFilterPanel extends CollapsablePanel
     public StarFilterPanel(FilterConfigManager filterConfigManager)
     {
         super("Filter");
+        addEasternHeaderComponent(new HyperlinkLabel("OSRS Portal", "https://osrsportal.com/shooting-stars-tracker"));
+
         this.filterConfigManager = filterConfigManager;
 
         checkBoxHideF2P = new FilterCheckBox("Hide F2P");
