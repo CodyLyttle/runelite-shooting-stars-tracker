@@ -4,3 +4,5 @@ The list is updated once a minute using https://osrsportal.com/activestars.
 
 ![image](https://github.com/CodyLyttle/runelite-shooting-stars-tracker/assets/18041702/0da5a59c-cdb3-41d5-9786-88ac2e300541)
 
+
+Note: The Star Miner Discord server has denied permission to distribute this plugin publicly via the Plugin Hub.
