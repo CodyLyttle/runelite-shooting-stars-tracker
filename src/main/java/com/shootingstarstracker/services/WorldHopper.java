@@ -15,7 +15,7 @@ public class WorldHopper
     private int currentHopAttempts;
 
     @Inject
-    Client client;
+    private Client client;
 
     @Getter
     private World pendingHop;

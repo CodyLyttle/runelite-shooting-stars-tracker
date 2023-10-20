@@ -1,6 +1,7 @@
 package com.shootingstarstracker.ui;
 
 import com.shootingstarstracker.models.ShootingStar;
+import com.shootingstarstracker.Parser;
 import lombok.Getter;
 import net.runelite.api.WorldType;
 import net.runelite.client.ui.ColorScheme;
@@ -159,74 +160,56 @@ public class StarRow extends JPanel
     {
         return useAlternativeColors ? BACKGROUND_COLOR_ALTERNATIVE : BACKGROUND_COLOR;
     }
-    
+
     private String createWorldTooltip()
     {
-        int number = star.getWorld().getId();
-        int population = star.getWorld().getPlayerCount();
-        String activity = star.getWorld().getActivity();
-        EnumSet<WorldType> types = star.getWorld().getTypes();
-        
+        final String newLinePrefix = "<br>";
+
+        final int number = star.getWorld().getId();
+        final int population = star.getWorld().getPlayerCount();
+        final String activity = star.getWorld().getActivity();
+        final EnumSet<WorldType> types = star.getWorld().getTypes();
+
         StringBuilder builder = new StringBuilder();
-        
-        // 🌍123   👤2000
+
+        // Example tooltip:
+        // 🌍123 👤2000
         // - Fishing Trawler
         // - Members
-        builder.append("\uD83C\uDF0D").append(number).append("   \uD83D\uDC64").append(population);
-        
+
+        builder.append("\uD83C\uDF0D").append(number).append(" \uD83D\uDC64").append(population);
+
         // Add world specific activity.
-        if(!activity.equals("-"))
+        if (!activity.equals("-"))
         {
-            builder.append("<br>- ").append(activity);
+            builder.append(newLinePrefix).append(activity);
         }
-        
-        for(WorldType type : types)
+
+        // Account for missing F2P tag
+        if (!types.contains(WorldType.MEMBERS))
+        {
+            builder.append(newLinePrefix).append("F2P");
+        }
+
+        for (WorldType type : types)
         {
             // Skill total is already displayed as an activity.
-            if(type == WorldType.SKILL_TOTAL)
+            if (type == WorldType.SKILL_TOTAL)
                 continue;
-            
-            builder.append("<br>- ").append(convertEnumToCamelCase(type.name()));
+
+            builder.append(newLinePrefix).append(Parser.enumStringToCamelCase(type.name()));
         }
-        
+
         // Line breaks require html tags.
         return "<html>" + builder + "</html>";
     }
 
     public void useAlternativeColors(boolean value)
     {
-        if(useAlternativeColors == value)
+        if (useAlternativeColors == value)
             return;
 
         useAlternativeColors = value;
         setBackground(getBackgroundColor());
-    }
-    
-    private String convertEnumToCamelCase(String str)
-    {
-        char[] chars = new char[str.length()];
-        boolean newWord = true;
-        
-        for(int i = 0; i < str.length(); i++)
-        {
-            char c = str.charAt(i);
-            
-            if(c == '_')
-            {
-                chars[i] = ' ';
-                newWord = true;
-            }
-            else if(newWord && Character.isAlphabetic(c))
-            {
-                chars[i] = c;
-                newWord = false;
-            }
-            else
-            {
-                chars[i] = Character.toLowerCase(c);
-            }
-        }
-        
-        return new String(chars);
     }
 }

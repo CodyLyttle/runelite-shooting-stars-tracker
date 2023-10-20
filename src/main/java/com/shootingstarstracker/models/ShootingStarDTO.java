@@ -28,17 +28,4 @@ public class ShootingStarDTO
     @Getter
     @Setter
     private String scout;
-
-    public String ToMessageString()
-    {
-        String msg = "";
-        msg += "Tier: " + tier + "\r\n";
-        msg += "Time: " + time + " mins ago\r\n";
-        msg += "World: " + world + "\r\n";
-        msg += "Region: " + region + "\r\n";
-        msg += "Location: " + loc + "\r\n";
-        msg += "Scout: " + scout + "\r\n";
-        
-        return msg;
-    }
 }

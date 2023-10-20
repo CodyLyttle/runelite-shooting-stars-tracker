@@ -15,17 +15,17 @@ public class ShootingStar
     }
     
     @Getter
-    private int minutesAgo;
+    private final int minutesAgo;
 
     @Getter
-    private int tier;
+    private final int tier;
     
     @Getter
-    private World world;
+    private final World world;
 
     @Getter
-    private String region;
+    private final String region;
 
     @Getter
-    private String location;
+    private final String location;
 }

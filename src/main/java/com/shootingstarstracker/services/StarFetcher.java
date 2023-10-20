@@ -20,13 +20,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ShootingStarsFetcher
+public class StarFetcher
 {
     @Inject
-    Client client;
+    private Client client;
 
     @Inject
-    WorldService worldService;
+    private WorldService worldService;
 
     public List<ShootingStar> fetchStars()
     {
@@ -90,7 +90,6 @@ public class ShootingStarsFetcher
         starWorld.setPlayerCount(world.getPlayers());
         starWorld.setLocation(world.getLocation());
         starWorld.setTypes(WorldUtil.toWorldTypes(world.getTypes()));
-
 
         return new ShootingStar(dto.getTime(), dto.getTier(), starWorld, dto.getRegion(), dto.getLoc());
     }
